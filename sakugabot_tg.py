@@ -84,7 +84,7 @@ while True:
             print(time.ctime(), '✅ [TG] Publish post with ID: ', id)
             post_id = open('post_id.txt', 'a+')
             post_id.write('%s\n' % id)
-            time.sleep(3600)
+            time.sleep(5400)
             
     print(time.ctime(), '✅ [TG] Add 50 post from Sakugabooru')
     time.sleep(1)
