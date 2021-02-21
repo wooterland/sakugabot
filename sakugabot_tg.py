@@ -78,10 +78,11 @@ while True:
             tb = telebot.TeleBot(tg_bot_token)
             tb.send_document(tg_channel_name, file_url, caption=all_tags)
 
-            if file_ext in ['mp4', 'webm']:
+            if file_ext in ['mp4', 'webm'] and score >= 70:
+                print('Score =', score)
                 upload_video(file_url, all_tags, artist, title, video_delete)
             else:
-                print('❌[TG] Need mp4 or webm')
+                print(time.ctime(), '❌ [VK] Need mp4/webm or score < 70')
 
             print(time.ctime(), '✅ [TG] Publish post with ID: ', id)
             post_id = open('post_id.txt', 'a+')

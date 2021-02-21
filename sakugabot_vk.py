@@ -53,19 +53,19 @@ def upload_video(file_url, all_tags, artist, title, video_delete):
         video_file=download_video(file_url),
         name=f'{title} ({artist})',
         description=all_tags,
-        is_private=False,
-        wallpost=False,
+        is_private=0,
+        wallpost=0,
         group_id=vk_group_id,
         album_id=vk_album_id,
         privacy_view='all',
-        repeat=True
+        repeat=1
     )
 
     vk_video_url = 'https://vk.com/video{}_{}'.format(
         video['owner_id'], video['video_id']
     )
 
-    print(time.ctime(), '✅ [VK] Upload video : ', vk_video_url)
+    print(time.ctime(), '✅ [VK] Upload video: ', vk_video_url)
 
     if vk_video_url or video_delete:
         os.remove(download_video(file_url))
