@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Vladislav Selivanov
 wooterland@fastmail.com
 2021
-'''
+"""
 
+import os
+import time
+
+import requests
 import vk_api
-import requests, os, time, datetime
-from vk_api import VkUpload
+
 from tokens import vk_login, vk_password, vk_group_id, vk_album_id
 
 
@@ -31,10 +34,10 @@ def auth_handler():
 
 def upload_video(file_url, all_tags, artist, title, video_delete):
     vk_session = vk_api.VkApi(
-        login = vk_login,
-        password = vk_password,
+        login=vk_login,
+        password=vk_password,
         auth_handler=auth_handler,
-        scope=471568, 
+        scope=471568,
         api_version='5.126',
     )
     try:
@@ -47,37 +50,34 @@ def upload_video(file_url, all_tags, artist, title, video_delete):
     upload = vk_api.VkUpload(vk_session)
 
     video = upload.video(
-        video_file = download_video(file_url),
-        name = f'{title} ({artist})',
-        description = all_tags,
-        is_private = 0,
-        wallpost = 0,
-        group_id = vk_group_id,
-        album_id = vk_album_id,
-        privacy_view = 'all',
-        repeat = 1
+        video_file=download_video(file_url),
+        name=f'{title} ({artist})',
+        description=all_tags,
+        is_private=False,
+        wallpost=False,
+        group_id=vk_group_id,
+        album_id=vk_album_id,
+        privacy_view='all',
+        repeat=True
     )
-    
+
     vk_video_url = 'https://vk.com/video{}_{}'.format(
         video['owner_id'], video['video_id']
     )
-    
+
     print(time.ctime(), '✅ [VK] Upload video : ', vk_video_url)
 
     if vk_video_url or video_delete:
         os.remove(download_video(file_url))
-    
-    #Публикация видео на стене
+
+    # Публикация видео на стене
     vk = vk_session.get_api()
 
     wall_post = vk.wall.post(
-        owner_id = video['owner_id'],
-        from_group = 1,
-        message = all_tags,
-        attachments = 'video{}_{}'.format(video['owner_id'], video['video_id'])
+        owner_id=video['owner_id'],
+        from_group=1,
+        message=all_tags,
+        attachments='video{}_{}'.format(video['owner_id'], video['video_id'])
     )
-    
-    print(time.ctime(),'✅ [VK] Post id: ', wall_post)
 
-if __name__ == '__main__':
-    upload_video()
+    print(time.ctime(), '✅ [VK] Post id: ', wall_post)
